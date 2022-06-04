@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #navbar{
+            display: flex;
+            height: 80px;
+            border: 1px solid red;
+            /* align-items: center; */
+        }
+        #navbar>div>input{
+            width:90%;
+            padding: 15px;
+            
+        }
+        #navbar>div{
+            display: flex;
+            align-self: center;
+            width: 50%;
+            margin-left: 15%;
+        }
+        #navbar>div>button{
+            display: block;
+        }
+        button>img{
+            width: 40px;
+            height: 40px;
+        }
+        #search_results{
+            margin-top: 100px;
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 20px;
+            background-color: whitesmoke;
+        }
+        #search_results>div>iframe{
+            width: 100%;
+        }
+        #search_results>div{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id = "navbar">
+        <img src="data:image/png;base64,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" alt="Youtube">
+        <div>
+        <input type="text" id="search" placeholder="Search">
+        <button onclick = "searchVideos()"><img src="http://assets.stickpng.com/images/585e4ae1cb11b227491c3393.png" alt="Search"></button>
+    </div>
+    </div>
+
+    
+    
+
+    <div id="search_results"></div>
+</body>
+</html>
+
+<script>
+    //Youtube API---Reading documentation
+    //GET https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=football&key=AIzaSyDv3NfkuCBtm3NxE64QjpXlUWAquLYhbh0
+    const searchVideos = async ()=>
+    {
+        try{
+            let inp = document.getElementById("search").value;
+            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${inp}&key=AIzaSyDv3NfkuCBtm3NxE64QjpXlUWAquLYhbh0&maxResults=50`)
+            let data = await res.json();
+            console.log("data:",data.items);
+            appendVideosFun(data.items)
+        }
+        catch(err)
+        {
+            console.log("err:",err);
+        }
+    }
+
+    //POSSIBLE MISTAKES
+    //1.async await not in  pair
+    //2 https
+    //3.res.json()
+    //seprate parameters using &
+    //5 wrong destination
+    //6 spelling mistakes
+
+
+    const appendVideosFun= (data)=>
+    {
+        document.getElementById("search_results").innerHTML= "";
+        data.forEach(({snippet,id:{videoId}})=>{
+            let divTag = document.createElement("div");
+            let pTag = document.createElement("p");
+
+            pTag.innerText= snippet.title
+
+            let frameTag = document.createElement("iframe");
+            frameTag.src=`https://www.youtube.com/embed/${videoId}`
+            frameTag.allow="fullscreen";
+
+            divTag.append(frameTag,pTag)
+
+            document.getElementById("search_results").append(divTag)
+            
+        })
+    }
+
+    //embded---add something
+    //src="https://www.youtube.com/embed/QXhV148EryQ"
+</script>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #maincontainer{
+            margin-top: 100px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #container{ 
+            width: 60%;
+            height: 600px;
+            cursor: pointer;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #container>div>iframe{
+            height: 500px;
+            width: 100%;
+        }
+        #rightcontainer{
+            display: grid;
+            grid-template-columns: repeat(1,1fr);
+            width: 30%;
+            gap: 15px;
+            
+        }
+        #rightcontainer>div{
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div id = "maincontainer">
+        <div id= "container"></div>
+        <div id = "rightcontainer"></div>
+    </div>
+</body>
+</html>
+<script>
+    let clickedvidDetails= JSON.parse(localStorage.getItem("clickedVideo"))
+    let videoId = clickedvidDetails.id.videoId
+    
+    const appendVideo= ({snippet,id})=>{
+        let divTag = document.createElement("div");
+        let pTag = document.createElement("p");
+        pTag.innerText= snippet.title
+
+        let frameTag = document.createElement("iframe");
+        frameTag.src=`https://www.youtube.com/embed/${id.videoId}`
+        frameTag.allow="fullscreen";
+
+        divTag.append(frameTag,pTag);
+        document.getElementById("container").append(divTag)
+    }
+    appendVideo(clickedvidDetails);
+    //GET https://youtube.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${videoId}&type=video&key=AIzaSyDv3NfkuCBtm3NxE64QjpXlUWAquLYhbh0&maxResults=50
+
+    const relatedVideos = async ()=>
+    {
+        try{
+            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${videoId}&type=video&key=AIzaSyA4-gsvY4X6NS9LTZrN_N-AtU0_d5UznGk
+&maxResults=50`)
+            let data = await res.json();
+            console.log("data:",data.items);
+            appendVideosFun(data.items)
+        }
+        catch(err)
+        {
+            console.log("err:",err);
+        }
+    }
+    relatedVideos();
+
+
+    const appendVideosFun= (data)=>
+    {
+        document.getElementById("rightcontainer").innerHTML= "";
+        data.forEach((el)=>{
+            let divTag = document.createElement("div");
+            let pTag = document.createElement("p");
+
+            pTag.innerText= el.snippet.title
+
+            // let frameTag = document.createElement("iframe");
+            // frameTag.src=`https://www.youtube.com/embed/${el.id.videoId}`
+            // frameTag.allow="fullscreen";
+
+             let imgTag = document.createElement("img");
+            imgTag.src = el.snippet.thumbnails.high.url;
+
+            divTag.addEventListener("click",()=>{
+                playVideoFun(el);
+            })
+
+            divTag.append(imgTag,pTag)
+
+            document.getElementById("rightcontainer").append(divTag)
+            
+        })
+    }
+</script>
+
